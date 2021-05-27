@@ -71,53 +71,59 @@ bool Graph::userExists(const std::string user) // проверка наличи�
     return false;
 }
 
-void Graph::findMinWayDFS()
+void Graph::searchThreeHandshakes()
 {
-    for (int i = 0; i < _usersCount; i++) {
-        std::cout << "\nAll dating couples through three handshakes for " << _users[i] << ":\n";
-        int currentPath = 0; //текущая длина пути
     bool visited[SIZE]; // список посещенных вершин
     for (int i = 0; i < SIZE; i++)
         visited[i] = false;
     int arrCountPaths[SIZE];
     for (int i = 0; i < SIZE; i++)
         arrCountPaths[i] = 0;
-         
-        findMinWayDFSInner(visited, i, currentPath, arrCountPaths); // запуск алгоритма 
+    for (int i = 0; i < _usersCount; i++) {
+        std::cout << "\nAll dating couples through three handshakes for " << _users[i] << ":\n";
+        int currentPath = 0; //текущая длина пути
+   
+           
+    searchThreeHandshakesInner(visited, _users[i],i ,currentPath ,arrCountPaths); // запуск алгоритма 
     }
    
 }
 
-void Graph::findMinWayDFSInner(bool visited[], int current,  int currentPath, int arrCountPaths[])
+void Graph::searchThreeHandshakesInner(bool visited[], std::string current, int indexTo,  int currentPath, int arrCountPaths[])
 {
     if (currentPath == 3) // если попали к третьей непрерывной связи
     {
-        std::cout << "\t\t- " << _users[current] << std::endl;
+        std::cout << "\t\t- " << _users[indexTo] << std::endl;
+       
        return;
     }
      std::string usersToVisit[SIZE]; // очередь пользователей для обхода от текущего пользователя
-    int countUser = 0;  // количество пользователей для обхода 
-   
+    int countUser = 0;  // количество пользователей имеющих связь с текущим пользователем
+    std::vector <int> relatedUserIndexes; // индексы пользователей имеющих связь с текущим пользователем
     for (int i = 0, j = 0; i < SIZE; i++) // поиск пользователя для следующего шага 
     {
-        if (connectionExists(_users[current], _users[i]) && !visited[i]) // если существует связь и она ведёт к не посещённому пользователю
+        if (connectionExists(_users[indexTo], _users[i]) && !visited[i]) // если существует связь и она ведёт к не посещённому пользователю
         {
             usersToVisit[j] = _users[i];                           // добавляем в очередь 
+            relatedUserIndexes.push_back(i);                       // сохраняем индекс 
             ++j;
             ++countUser;                                     // и увеличиваем счётчик
         }
     }
     if (countUser > 0)
     {
-        visited[current] = true;
+        visited[indexTo] = true;
     }
-    arrCountPaths[current] = countUser;
+    arrCountPaths[indexTo] = countUser;
     for (int i = 0; i < countUser; i++) // переходим в следующую вершину если такая есть
     {
-        findMinWayDFSInner(visited, i, currentPath++, arrCountPaths);
-        --arrCountPaths[current];
-        if (!arrCountPaths[current])
-            visited[current] = false;
+        searchThreeHandshakesInner(visited, usersToVisit[i],relatedUserIndexes[i], currentPath+1, arrCountPaths);
+        --arrCountPaths[indexTo];
+        if (!arrCountPaths[indexTo])
+        {
+            visited[indexTo] = false;
+           
+        }
     }
 
 }
