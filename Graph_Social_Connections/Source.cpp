@@ -16,8 +16,7 @@ int main()
 	connection.addUser("I");
 	connection.addUser("J");
 	connection.addUser("K");
-	//for (int i = 0; i < SIZE; i++)
-	//				std::cout << connection._users[i] << "\n";
+
 	connection.addConnection("A", "C", 1);
 	connection.addConnection("B", "C", 1);
 	connection.addConnection("B", "H", 1);
@@ -31,10 +30,8 @@ int main()
 	connection.addConnection("G", "H", 1);
 	connection.addConnection("G", "K", 1);
 	connection.addConnection("H", "K", 1);
-	/*for (int i = 0; i < SIZE; i++)
-		for (int j = 0; j < SIZE; j++)
-			std::cout<<connection._matrix[i][j]<<"\n";*/
-	
+
+
 	std::cout << std::endl;
 	connection.searchThreeHandshakes();
 	return 0;
